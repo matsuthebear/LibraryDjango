@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no initial-scale = 1.0,maximum-scale = 1.0">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i">
+    <link rel="stylesheet" href="{% static 'assets/fonts/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css">
+    <link rel="stylesheet" href="{% static 'assets/css/smoothproducts.css' %}">
+    <style>
+        main {flex: 1 0 auto;}
+        body {
+          display: flex;
+          min-height: 100vh;
+          flex-direction: column;
+          }
+        #footer {
+          clear: both;
+          position: absolute;
+          margin-top: -200px;
+        }
+
+
+    </style>
+
+    {% if title %}
+        <title>{{ title }}</title>
+    {% else %}
+        <title> Library "Exam" </title>
+    {% endif %}
+</head>
+
+<body>
+    {% if user.is_authenticated %}
+      {% if not user.profile.name and not profile_check %}
+        <meta http-equiv="refresh" content="0; url={% url 'profile' %}">
+      {% endif %}
+    {% endif %}
+    {% include 'navbar.html' %}
+    <main>
+      <div class="align-self-center">
+        <div class="col-md-12">
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }}">
+                  {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+          {% block content %}
+          {% endblock %}
+        </div>
+    </div>
+  </main>
+  <div class="footer-dark">
+  <footer class="page-footer font-small text-white bg-dark pt-4">
+          <div class="container">
+              <div class="row">
+                  <div class="col-sm-6 col-md-3 item">
+                      <h3>Author</h3>
+                      <ul>
+                          <li>Matteo Marzio</li>
+                          <li>UniVR Verona</li>
+                      </ul>
+                  </div>
+                  <div class="col-sm-6 col-md-3 item">
+                  </div>
+                  <div class="col-md-6 item text">
+                      <h3>About me</h3>
+                      <p>I'm an italian developer, who studies Computer Science at the University of Verona.
+                        This project was created for an exam, but will be free to use and modify on GitHub. </p>
+                  </div>
+              <p class="copyright">Matteo Marzio © 2019 </p>
+              </div>
+          </div>
+      </footer>
+  </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="{% static 'assets/js/jquery.min.js' %}"></script>
+    <script src="{% static 'assets/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script>
+    <script src="{% static 'assets/js/smoothproducts.min.js' %}"></script>
+    <script src="{% static 'assets/js/theme.js' %}"></script>
+    <script src="{% static 'assets/js/bs-animation.js' %}"></script>
+    <script type="text/javascript">
+      $("[data-toggle=popover]").popover();
+    </script>
+</body>
+
+</html>

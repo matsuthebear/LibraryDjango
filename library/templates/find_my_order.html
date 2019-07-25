@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+  <div class="alert alert-primary alert-dismissible fade show">
+    Search and Check your orders!
+  </div>
+  <form class="bd-search d-flex align-items-center" action = "/find_order/">
+    <input class="form-control" type="text" placeholder="Search your order by inserting its ID"
+    aria-label="Search" name = "query_order">
+    <button class="btn btn-info" type="submit">Search </button>
+  </form>
+  {% if order and not user.is_authenticated %}
+  <br> <h2> Your Order </h2> <br>
+  {% elif order and user.is_authenticated %}
+  <br> <h2> Your Orders </h2> <br>
+  {% endif %}
+      {% for item in order %}
+      <h3> ID Order : {{ item.id }} </h3> <br>
+      Ordered made in {{ item.date }} <br>
+      {% if item.address %} Secondary Address : {{ item.address }} {% endif %} <br>
+      Total Price : {{ item.total_cost }}<br>
+      PAYMENT STATUS  : {{ item.get_payment_display }} - DELIVER STATUS : {{ item.get_status_display }}
+      <table class="table">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Author</th>
+            <th scope="col">ISBN</th>
+            <th scope="col">Price</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for book in item.books.all %}
+            <tr>
+              <td>{{book.title}}</td>
+              <td>{{book.author}}</td>
+              <td>{{book.isbn}}</td>
+              <td>{{book.price}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+      <br><br>
+      {% endfor %}
+
+{% endblock content %}

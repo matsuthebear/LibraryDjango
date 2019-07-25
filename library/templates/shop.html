@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+<style>
+  .card-columns {
+  @include media-breakpoint-only(lg) {
+    column-count: 4;
+  }
+  @include media-breakpoint-only(xl) {
+    column-count: 5;
+  }
+}
+</style>
+{% block content %}
+
+{% csrf_token %}
+<div class="container">
+<div class="row">
+{% for book in books %}
+
+    <div class="col-sm-4 py-2">
+       <div class="card card-body h-100">
+        {% if book.image %}
+          <img class="card-img-top" src="{{ book.image.url }}" alt="{{ book.title }}">
+        {% else %}
+          <img class="card-img-top" src="{% static 'no_image_available.png' %}" alt="{{ book.title }}">
+        {% endif %}
+        <h5 class="card-title">{{book.title}}</h5>
+        <form method="GET">
+        <button type="button"
+        class="btn btn-lg btn-danger" data-toggle="popover" title="{{book.title}} by {{book.author}}" data-content="{{book.description}}">
+        Get info</button>
+        <a href="{% url 'add_to_cart' book.id %}" class="btn btn-warning">
+        Buy for {{ book.price }} &#8364; </a>
+        </form>
+      </div>
+    </div>
+
+{% endfor %}
+
+</div>
+</div>
+{% endblock %}

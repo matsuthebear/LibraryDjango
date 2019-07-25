@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="alert alert-success" role="alert">
+  Search and find the most selling books sold in this site by genre!
+</div>
+{% if not leaderboard %}
+<div class="alert alert-warning" role="alert">
+  <strong>Warning!</strong> We could not find a single book! Try with other genres
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endif %}
+<form class="bd-search d-flex align-items-center" action = "/leaderboard/">
+  <input class="form-control" type="text" placeholder="Search a genre"
+  aria-label="Search" name = "query_leaderboard">
+  <button class="btn btn-info" type="submit">Search</button>
+</form>
+<br>
+  {% if leaderboard %}
+  <table class="table">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">Position</th>
+        <th scope="col">Title</th>
+        <th scope="col">Author</th>
+        <th scope="col">Weeks</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for book in leaderboard %}
+      <tr>
+        <td>{{book.position}}</td>
+        <td>{{book.book.title}}</td>
+        <td>{{book.book.author}}</td>
+        <td>{{book.many_weeks}} </td>
+      </tr>
+      {% endfor %}
+    {% endif %}
+  </table>
+
+{% endblock %}
