@@ -1,33 +1,37 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1> This is your cart! </h1>
-<table class="table">
-  <thead class="thead-light">
-    <tr>
-      <th scope="col">Title</th>
-      <th scope="col">Author</th>
-      <th scope="col">ISBN</th>
-      <th scope="col">Price</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for item in cart %}
-    <tr>
-      <td>{{item.title}}</td>
-      <td>{{item.author}}</td>
-      <td>{{item.isbn}}</td>
-      <td>{{item.price}}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-<h2> Total : {{ total_price |floatformat:2 }} &euro;</h2>
-<form method="POST" class="post-form">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="save btn btn-default">Save</button>
-    </form>
+  {% if cart %}
+    <h1> This is your cart! </h1>
+    <table class="table">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">Title</th>
+          <th scope="col">Author</th>
+          <th scope="col">ISBN</th>
+          <th scope="col">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart %}
+        <tr>
+          <td>{{item.title}}</td>
+          <td>{{item.author}}</td>
+          <td>{{item.isbn}}</td>
+          <td>{{item.price}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <h2> Total : {{ total_price |floatformat:2 }} &euro;</h2>
+    <form method="POST" class="post-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="save btn btn-default">Save</button>
+        </form>
+  {% else %}
+    <h1> Your cart is empty! </h1>
+  {% endif %}
 
 
 
