@@ -4,6 +4,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from users.forms import CreateOrder
 from django.db.models import F
+from users.models import BookCard
+
 
 def home(request):
     context = {
@@ -66,38 +68,52 @@ def leaderboard(request):
 
 @login_required()
 def cart(request):
-    if request.method == 'POST':
-        form = CreateOrder(request.POST, instance=request.user)
-        order = Order.objects.create(user = request.user)
-        cart = Cart.objects.get(user=request.user)
-        for book in cart.books.all():
-            order.books.add(book.id)
-            Book.objects.filter(id=book.id).update(units_sold=F('units_sold')+1)
-        if form.data.get('address'):
-            order.address = form.data.get('address')
-        order.payment = form.data.get('payment')
-        order.total_cost = cart.get_price()
-        order.save()
-        cart.books.clear()
-        cart.save()
-        messages.success(request, f'The order was created successfully!')
+    try:
+        cart = Cart.objects.get(user = request.user)
+    except:
+        cart = Cart.objects.create(user = request.user)
+    if cart:
+        if request.method == 'POST':
+            form = CreateOrder(request.POST, instance=request.user)
+            order = Order.objects.create(user = request.user)
+            cart = Cart.objects.get(user=request.user)
+            for book in cart.books.all():
+                order.books.add(book.id)
+                order.points += book.points
+                Book.objects.filter(id=book.id).update(units_sold=F('units_sold')+1)
+            if form.data.get('address'):
+                order.address = form.data.get('address')
+            order.payment = form.data.get('payment')
+            order.total_cost = cart.get_price()
+            order.save()
+            cart.books.clear()
+            cart.save()
+            card = BookCard.objects.get(user = request.user)
+            card.points += order.points
+            card.save()
+            messages.success(request, f'The order was created successfully!')
 
-        #messages.warning(request, 'Warning : the order was not created!')
-        return render(request, 'home.html')
+            #messages.warning(request, 'Warning : the order was not created!')
+            return render(request, 'home.html')
+        else:
+            try:
+                cart = Cart.objects.get(user = request.user)
+            except:
+                cart = Cart.objects.create(user = request.user)
+            form = CreateOrder(instance=request.user)
+            context = {
+                'cart' : cart.books.all(),
+                'total_price' : cart.get_price(),
+                'form' : form,
+                'title' : 'Cart',
+            }
+
+            return render(request, 'cart.html', context)
     else:
-        try:
-            cart = Cart.objects.get(user = request.user)
-        except:
-            cart = Cart.objects.create(user = request.user)
-        form = CreateOrder(instance=request.user)
         context = {
-            'cart' : cart.books.all(),
-            'total_price' : cart.get_price(),
-            'form' : form,
-            'title' : 'Cart',
-        }
-
-        return render(request, 'cart.html', context)
+                'title' : 'Cart',
+            }
+        return render(request,'cart.html', context)
 
 @login_required()
 def cart_add(request, **kwargs):
