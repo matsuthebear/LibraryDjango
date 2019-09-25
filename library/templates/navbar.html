@@ -1,10 +1,15 @@
     <nav class="navbar navbar-light navbar-expand-lg bg-white clean-navbar">
-        <div class="container"><a class="navbar-brand logo" href="#">Library "Exam"</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+      {% if user.is_superuser %}
+        <div class="container"><a class="navbar-brand logo" href="{% url 'admin:index' %}">Admin Mode</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+      {% else %}
+      <div class="container"><a class="navbar-brand logo" href="#">Library "Exam"</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+      {% endif %}
             <div class="collapse navbar-collapse"
                 id="navcol-1">
                 <ul class="nav navbar-nav ml-auto">
+
                     <li class="nav-item" role="presentation">
-                      <a class="nav-link active" href="{% url 'home' %}">Home</a></li>
+                      <a class="nav-link active" href="{% url 'home' %}">HOME</a></li>
                     <li class="nav-item" role="presentation">
                       <a class="nav-link active" href="{% url 'shop' %}">SHOP</a></li>
                     <li class="nav-item" role="presentation">
@@ -17,9 +22,9 @@
                     <li class="nav-item" role="presentation">
                       <a class="nav-link active" href="{% url 'profile' %}"><i class="fa fa-user"></i>PROFILE</a></li>
                     <li class="nav-item" role="presentation">
-                      <a class="nav-link active" href="{% url 'logout' %}"><i class="fa fa-user-times"></i>LOG OUT</a></li>
-                    {% else %}
+                    <a class="nav-link active" href="{% url 'logout' %}"><i class="fa fa-user-times"></i>LOG OUT</a></li>
                     <li class="nav-item" role="presentation">
+                      {% else %}
                       <a class="nav-link active" href="{% url 'login' %}"><i class="fa fa-user"></i>LOGIN</a></li>
                     <li class="nav-item" role="presentation">
                       <a class="nav-link active" href="{% url 'register' %}"><i class="fa fa-user-plus"></i>SIGN UP</a></li>

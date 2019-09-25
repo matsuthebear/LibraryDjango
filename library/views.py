@@ -58,7 +58,10 @@ def search_order(request):
 
 def leaderboard(request):
     query = request.GET.get('query_leaderboard')
-    leaderboard = LeaderBoard.objects.filter(genre = query).order_by('position')
+    if (query):
+        leaderboard = LeaderBoard.objects.filter(genre = query).order_by('position')
+    else:
+        leaderboard = LeaderBoard.objects.all().order_by('position')
     context = {
         'title' : 'Leaderboard',
         'query' : query,

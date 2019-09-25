@@ -29,7 +29,11 @@
         <button type="button"
         class="btn btn-lg btn-danger" data-toggle="popover" title="{{book.title}} by {{book.author}}" data-content="{{book.description}}">
         Get info</button>
+        {% if user.is_authenticated %}
         <a href="{% url 'add_to_cart' book.id %}" class="btn btn-warning">
+        {% else %}
+        <a href="{% url 'login' %}" class="btn btn-warning">
+        {% endif %}
         Buy for {{ book.price }} &#8364; </a>
         </form>
       </div>

@@ -31,7 +31,9 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
     'stripe',
+    'django_extensions',
     'crispy_forms',
     'library.apps.LibraryConfig',
     'users.apps.UsersConfig',
